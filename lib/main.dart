@@ -1,40 +1,86 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const ButtonApp());
+}
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class ButtonApp extends StatelessWidget {
+  const ButtonApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Application name
-      title: 'Flutter Hello World',
-      // Application theme data, you can set the colors for the application as
-      // you want
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
+      title: 'Button Types',
+      home: const Scaffold(
+        body: ButtonTypesExample(),
       ),
-      // A widget which will be started on application startup
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title;
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class ButtonTypesExample extends StatelessWidget {
+  const ButtonTypesExample({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // The title text which will be shown on the action bar
-        title: Text(title),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Row(
+        children: const <Widget>[
+          Spacer(),
+          ButtonTypesGroup(enabled: true),
+          ButtonTypesGroup(enabled: false),
+          Spacer(),
+        ],
       ),
-      body: Center(
-        child: Text(
-          'Hello, World!',
-        ),
+    );
+  }
+}
+
+class ButtonTypesGroup extends StatelessWidget {
+  const ButtonTypesGroup({super.key, required this.enabled});
+
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final VoidCallback? onPressed = enabled ? () {} : null;
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          ElevatedButton(onPressed: onPressed, child: const Text('Elevated')),
+
+          // Use an ElevatedButton with specific style to implement the
+          // 'Filled' type.
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+            onPressed: onPressed,
+            child: const Text('Filled'),
+          ),
+
+          // Use an ElevatedButton with specific style to implement the
+          // 'Filled Tonal' type.
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor:
+                  Theme.of(context).colorScheme.onSecondaryContainer,
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+            onPressed: onPressed,
+            child: const Text('Filled Tonal'),
+          ),
+
+          OutlinedButton(onPressed: onPressed, child: const Text('Outlined')),
+
+          TextButton(onPressed: onPressed, child: const Text('Text OnPress')),
+        ],
       ),
     );
   }
